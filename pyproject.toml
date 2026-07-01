@@ -1,5 +1,5 @@
 [project]
-name = "techanalysisexcuter"
+name = "techanalysisexecutor"
 version = "0.1.0"
 description = "기술적 분석 및 차트 시각화 시스템"
 requires-python = ">=3.9"

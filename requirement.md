@@ -1,4 +1,4 @@
-# TechAnalysisExcuter 요구사항
+# TechAnalysisExecutor 요구사항
 
 ## 프로젝트 개요
 
