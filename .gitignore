@@ -12,3 +12,6 @@ data/uploads/
 # IDE
 .vscode/
 .idea/
+
+# Local progress log
+progress_log.md
