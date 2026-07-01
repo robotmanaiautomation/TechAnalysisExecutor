@@ -9,7 +9,7 @@ dependencies = [
     "pandas>=1.5.0",
     "numpy>=1.24.0",
     "pandas-ta>=0.3.14",
-    "mplfinance>=0.12.10b0",
-    "matplotlib>=3.7.0",
+    "plotly>=5.0.0",
+    "kaleido>=0.2.0",
     "python-multipart>=0.0.6",
 ]
