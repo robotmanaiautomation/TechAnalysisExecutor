@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+
+# BAR data uploads
+data/uploads/
+
+# IDE
+.vscode/
+.idea/

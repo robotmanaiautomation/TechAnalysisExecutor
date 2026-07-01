@@ -1,0 +1,15 @@
+[project]
+name = "techanalysisexcuter"
+version = "0.1.0"
+description = "기술적 분석 및 차트 시각화 시스템"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    "pandas>=1.5.0",
+    "numpy>=1.24.0",
+    "pandas-ta>=0.3.14",
+    "mplfinance>=0.12.10b0",
+    "matplotlib>=3.7.0",
+    "python-multipart>=0.0.6",
+]
