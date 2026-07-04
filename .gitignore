@@ -9,6 +9,9 @@ build/
 # BAR data uploads
 data/uploads/
 
+# BAR storage DB (created at runtime)
+app/data/*.db
+
 # IDE
 .vscode/
 .idea/

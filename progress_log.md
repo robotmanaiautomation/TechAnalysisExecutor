@@ -1,129 +1,93 @@
-# TechAnalysisExecutor — 요구사항 대 코드 구현 비교 체크리스트
+# TechAnalysisExecutor — 진행 로그
 
-> 컨텍스트 오버플로우 시 재개 용도로 사용. requirement.md 항목별 체크표시.
+> 컨텍스트 오버플로우 시 재개 용도. 각 task를 독립적으로 기록하여 중단 후 재개 가능.
+> 현재 진행 task는 **[진행 중]**, 완료된 task는 **[완료]**, 미완료는 **[대기]**.
 
 ---
 
-## 1. 프로젝트 개요
+## Phase 1: 프로젝트 스캐폴딩
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| 기술적 분석 + 차트 시각화 시스템 | ❌ | 소스 코드 없음 |
-| infoGetherAPI 수집 데이터 + CSV BAR 데이터 기반 | ❌ | — |
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 1.1 | 프로젝트 폴더 구조 생성 (app/, app/db/, app/services/, app/routers/, app/models/) | [대기] | Python 패키지 구조 |
+| 1.2 | 가상 환경 설정 (uv) 및 의존성 설치 | [대기] | pyproject.toml 기반 |
+| 1.3 | FastAPI 기본 서버 코드 (main.py 진입점, uvicorn 설정) | [대기] | 포트 8002, 호스트 127.0.0.1 |
 
-## 2. 핵심 목적
+## Phase 2: infoGetherAPI DB 연동
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| 기술적 분석 자동화 (SMA, RSI, MACD, Bollinger Bands 등) | ❌ | pandas-ta 의존성만 정의됨 |
-| 차트 시각화 (Plotly: 캔들스틱 + 지표 오버레이) | ❌ | plotly 의존성만 정의됨 |
-| 다양한 데이터 소스 지원 (infoGetherAPI + CSV 입력) | ❌ | — |
-| Web API 제공 (FastAPI) | ❌ | fastapi 의존성만 정의됨 |
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 2.1 | DB 설정 (finance.db 경로 설정, read-only 연결) | [대기] | infoGetherAPI DB 공유 |
+| 2.2 | SQLAlchemy 모델 정의 (PriceRecord) | [대기] | finance.db의 price_records 테이블 매핑 |
+| 2.3 | DB 세션 관리 (get_db 의존성 인젝션) | [대기] | FastAPI 의존성 인젝션 |
 
-## 3. 데이터 소스
+## Phase 3: BAR 데이터 스토리지 (별도 SQLite)
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| infoGetherAPI 연동 (127.0.0.1:8000) | ❌ | — |
-| BAR 데이터 (CSV 입력) | ❌ | — |
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 3.1 | BAR 데이터 SQLite 스키마 정의 (bar_data 테이블) | [대기] | 자체 DB |
+| 3.2 | BAR 데이터 CRUD 서비스 | [대기] | insert/query/delete |
+| 3.3 | CSV 업로드 파싱 서비스 | [대기] | python-multipart + pandas |
 
-## 4. 사용 라이브러리
+## Phase 4: 수익률 계산 서비스 (당장 목표 핵심)
 
-### 4.1 기술적 분석
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 4.1 | 티커별 가격 시계열 조회 서비스 (infoGetherAPI DB → pandas DataFrame) | [대기] | price_records 조회 |
+| 4.2 | 수익률 계산 로직 (초기 가격 대비 % 변화율) | [대기] | 첫날 가격을 기준으로 누적 수익률 |
+| 4.3 | 다중 티커 수익률 병합 (모든 티커를 동일 x축으로 alignment) | [대기] | pandas multi-index 또는 dict |
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| pandas-ta (SMA, EMA, RSI, MACD, Bollinger Bands, Stochastic, OBV) | ❌ | pyproject.toml에 의존성만 정의됨 |
+## Phase 5: 차트 데이터 생성 (당장 목표 핵심)
 
-### 4.2 차트 시각화
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 5.1 | 수익률 선그래프 데이터 생성 (JSON 직렬화: 티커별 날짜+수익률 배열) | [대기] | Chart.js 호환 포맷 |
+| 5.2 | plotly 기반 수익률 차트 생성 (다중 선그래프) | [대기] | plotly figure → JSON |
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| plotly (인터랙티브 차트: 캔들스틱, 선 차트, 지표 오버레이) | ❌ | pyproject.toml에 의존성만 정의됨 |
+## Phase 6: API 엔드포인트 (당장 목표 핵심)
 
-### 4.3 Web 프레임워크
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 6.1 | POST /api/return-chart — 보유 티커 목록 받아 수익률 선그래프 JSON 응답 | [대기] | 당장 목표의 메인 엔드포인트 |
+| 6.2 | GET /api/bar/{ticker} — 티커별 BAR 데이터 조회 | [대기] | |
+| 6.3 | POST /api/bar/bulk-fetch — 다중 티커 BAR 데이터 일괄 조회 | [대기] | |
+| 6.4 | GET /api/analysis/{ticker} — 기술적 지표 계산 결과 | [대기] | |
+| 6.5 | POST /api/analysis/bulk — 다중 티커 기술적 분석 일괄 수행 | [대기] | |
+| 6.6 | GET /api/chart/{ticker} — 차트 (JSON/HTML) | [대기] | |
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| FastAPI (REST API 서버) | ❌ | — |
-| uvicorn (ASGI 서버) | ❌ | — |
+## Phase 7: 기술적 분석 엔진
 
-### 4.4 기타
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 7.1 | pandas-ta 기반 지표 계산 서비스 (SMA, EMA, RSI, MACD, Bollinger Bands) | [대기] | |
+| 7.2 | 개별 티커 분석 엔드포인트 구현 | [대기] | |
+| 7.3 | 벌크 분석 엔드포인트 구현 | [대기] | |
 
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| pandas (시계열 데이터 처리) | ❌ | — |
-| numpy (수치 계산) | ❌ | — |
+## Phase 8: BAR 데이터 관리 API
 
-## 5. API 엔드포인트
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 8.1 | POST /api/bar/upload — CSV 파일 업로드 | [대기] | |
+| 8.2 | DELETE /api/bar/{ticker} — 티커별 BAR 삭제 | [대기] | |
 
-### 5.1 BAR 데이터 관리
+## Phase 9: PortfolioManager 연동 (당장 목표 핵심)
 
-| 엔드포인트 | 구현 여부 | 비고 |
-|-----------|-----------|------|
-| POST /api/bar/upload (CSV 업로드) | ❌ | — |
-| GET /api/bar/{ticker} (BAR 조회) | ❌ | — |
-| DELETE /api/bar/{ticker} (BAR 삭제) | ❌ | — |
-| POST /api/bar/bulk-fetch (다중 티커 BAR 일괄 조회) | ❌ | — |
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 9.1 | PortfolioManager 백엔드: GET /portfolios/return-chart — TechAnalysisExecutor 호출 | [대기] | |
+| 9.2 | PortfolioManager 프론트엔드: 수익률 추이 차트 뷰 추가 (Chart.js) | [대기] | |
 
-### 5.2 기술적 분석
+## Phase 10: 테스트 및 배포
 
-| 엔드포인트 | 구현 여부 | 비고 |
-|-----------|-----------|------|
-| GET /api/analysis/{ticker} (지표 계산: ?indicators=rsi,sma,macd & ?days=30) | ❌ | — |
-| POST /api/analysis/bulk (다중 티커 기술적 분석 일괄 수행) | ❌ | — |
+| # | Task | 상태 | 비고 |
+|---|------|------|------|
+| 10.1 | 로컬 테스트 (TechAnalysisExecutor 서버 기동 + 엔드포인트 검증) | [대기] | |
+| 10.2 | PortfolioManager ↔ TechAnalysisExecutor 통합 테스트 | [대기] | |
+| 10.3 | AnServer 배포 설정 | [대기] | |
 
-### 5.3 차트 시각화
+---
 
-| 엔드포인트 | 구현 여부 | 비고 |
-|-----------|-----------|------|
-| GET /api/chart/{ticker} (차트: ?format=json/html, ?type=candle/line, ?overlay=sma,ema,bb, ?days=30) | ❌ | — |
+## 현재 목표
 
-## 6. 시스템 요구사항
-
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| Python 3.9+ 호환 | ✅ | `pyproject.toml` — requires-python >=3.9 |
-| 포트 8002 | ❌ | 실제 서버 코드 없음 |
-| 호스트 127.0.0.1 | ❌ | — |
-| SQLite 또는 In-memory 스토리지 | ❌ | — |
-
-## 7. 분석 대상
-
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| infoGetherAPI 10개 티커 자동 지원 | ❌ | — |
-| CSV 업로드 추가 티커 분석 | ❌ | — |
-
-## 8. 향후 확장
-
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| 거래 신호 생성 (매수/매도) | ❌ | — |
-| 백테스팅 기능 | ❌ | — |
-| WebSocket 실시간 차트 업데이트 | ❌ | — |
-
-## 9. 프로젝트 설정 (Phase 1 스캐폴딩)
-
-| 요구사항 | 구현 여부 | 비고 |
-|----------|-----------|------|
-| GitHub 저장소 + docs 서브모듈 | ✅ | `docs/` — myFinancesApi-docs |
-| requirement.md 작성 | ✅ | `docs/TechAnalysisExecutor_requirements.md` |
-| pyproject.toml 작성 | ✅ | 의존성 정의 완료 |
-| 프로젝트 폴더 구조 생성 | ❌ | — |
-| 가상 환경 설정 (uv) | ❌ | — |
-| FastAPI 기본 서버 코드 | ❌ | — |
-
-## 10. 구현 누락 사항 요약
-
-**Phase 1 스캐폴딩 완료 (docs 서브모듈, requirement.md, pyproject.toml) 이후 중단됨 — 실제 소스 코드 전혀 없음.**
-
-1. **프로젝트 폴더 구조** — Python 패키지로 구성되지 않음
-2. **가상 환경** — uv 기반 venv 미설정
-3. **FastAPI 서버** — 기본 서버 코드 미작성
-4. **BAR 데이터 스토리지** — SQLite 스키마, CRUD 미구현
-5. **BAR 데이터 API** — 업로드/조회/삭제 엔드포인트 미구현
-6. **infoGetherAPI 연동** — 미구현
-7. **기술적 분석 엔진** — pandas-ta 기반 지표 계산 미구현
-8. **차트 시각화** — plotly 기반 차트 생성 미구현
-9. **차트 API** — 차트 응답 엔드포인트 미구현
+**당장 목표**: PortfolioManager에서 보유 자산들의 수익률 추이를 x축=시간, y축=수익률(%), 선그래프로 표시
+**핵심 Phase**: 1 → 2 → 4 → 5 → 6.1 → 9
