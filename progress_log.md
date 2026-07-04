@@ -64,12 +64,14 @@
 | POST /api/bar/upload (CSV 업로드) | ❌ | — |
 | GET /api/bar/{ticker} (BAR 조회) | ❌ | — |
 | DELETE /api/bar/{ticker} (BAR 삭제) | ❌ | — |
+| POST /api/bar/bulk-fetch (다중 티커 BAR 일괄 조회) | ❌ | — |
 
 ### 5.2 기술적 분석
 
 | 엔드포인트 | 구현 여부 | 비고 |
 |-----------|-----------|------|
 | GET /api/analysis/{ticker} (지표 계산: ?indicators=rsi,sma,macd & ?days=30) | ❌ | — |
+| POST /api/analysis/bulk (다중 티커 기술적 분석 일괄 수행) | ❌ | — |
 
 ### 5.3 차트 시각화
 
