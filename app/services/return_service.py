@@ -103,6 +103,7 @@ def compute_return_chart(
     tickers: List[str],
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
+    max_points: int = 200,
 ) -> Dict[str, Any]:
     """
     다중 티커 수익률 차트 데이터 생성 (일괄 처리).
@@ -113,6 +114,7 @@ def compute_return_chart(
         tickers: 티커 목록 (symbol)
         start_date: 시작일 (None이면 가장 오래된 데이터부터)
         end_date: 종료일 (None이면 최신까지)
+        max_points: 모바일/차트 성능을 위한 최대 데이터 포인트 수
 
     Returns:
         merge_returns 결과 (JSON 직렬화 가능)
@@ -127,8 +129,8 @@ def compute_return_chart(
         for ticker, df in price_series.items():
             returns[ticker] = calculate_return(df)
 
-        # 3. 동일 x축 alignment
-        chart_data = merge_returns(returns)
+        # 3. 동일 x축 alignment + 모바일 다운샘플링
+        chart_data = merge_returns(returns, max_points=max_points)
 
         return chart_data
     finally:
