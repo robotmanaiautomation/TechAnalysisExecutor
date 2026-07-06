@@ -45,12 +45,14 @@ def calculate_return(df: pd.DataFrame, base_price: Optional[float] = None) -> pd
 
 def merge_returns(
     returns_by_ticker: Dict[str, pd.DataFrame],
+    max_points: int = 200,
 ) -> Dict[str, Any]:
     """
     다중 티커 수익률 병합 — 동일 x축(time)으로 alignment.
 
     Args:
         returns_by_ticker: {ticker: DataFrame(timestamp, return_pct)}
+        max_points: 모바일/차트 성능을 위한 최대 데이터 포인트 수
 
     Returns:
         {
@@ -70,6 +72,11 @@ def merge_returns(
         all_timestamps.update(df["timestamp"].tolist())
 
     timestamps = sorted(all_timestamps)
+
+    # 모바일/차트 성능을 위한 다운샘플링 (균등 간격)
+    if len(timestamps) > max_points:
+        step = len(timestamps) // max_points
+        timestamps = timestamps[::step]
 
     # 티커별 수익률을 타임스탬프 인덱스로 alignment
     tickers = list(valid.keys())
