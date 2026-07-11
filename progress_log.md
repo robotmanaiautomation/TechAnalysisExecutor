@@ -74,20 +74,27 @@
 
 | # | Task | 상태 | 비고 |
 |---|------|------|------|
-| 9.1 | PortfolioManager 백엔드: GET /portfolios/return-chart — TechAnalysisExecutor 호출 | [대기] | |
-| 9.2 | PortfolioManager 프론트엔드: 수익률 추이 차트 뷰 추가 (Chart.js) | [대기] | |
+| 9.1 | PortfolioManager 백엔드: GET /portfolios/return-chart — TechAnalysisExecutor 호출 | [완료] | TechAnalysisExecutor POST /api/return-chart 연동 |
+| 9.2 | PortfolioManager 프론트엔드: 수익률 추이 차트 뷰 추가 (Chart.js) | [완료] | full-width 수익률 선그래프 |
 
 ## Phase 10: 테스트 및 배포
 
 | # | Task | 상태 | 비고 |
 |---|------|------|------|
-| 10.1 | 로컬 테스트 (TechAnalysisExecutor 서버 기동 + 엔드포인트 검증) | [대기] | |
-| 10.2 | PortfolioManager ↔ TechAnalysisExecutor 통합 테스트 | [대기] | |
-| 10.3 | AnServer 배포 설정 | [대기] | |
+| 10.1 | 로컬 테스트 (TechAnalysisExecutor 서버 기동 + 엔드포인트 검증) | [완료] | AnServer에서 실행 중 |
+| 10.2 | PortfolioManager ↔ TechAnalysisExecutor 통합 테스트 | [완료] | 수익률 추이 차트 연동 확인 |
+| 10.3 | AnServer 배포 설정 | [완료] | PID 5333, 포트 8002 |
+
+---
+
+## 추가 완료: 모바일 차트 성능 최적화
+
+- 다운샘플링: 최대 200개 포인트로 제한 (모바일 차트 렉 해결)
+- `max_points` 파라미터 명시적 전달
 
 ---
 
 ## 현재 목표
 
-**당장 목표**: PortfolioManager에서 보유 자산들의 수익률 추이를 x축=시간, y축=수익률(%), 선그래프로 표시
-**핵심 Phase**: 1 → 2 → 4 → 5 → 6.1 → 9
+**완료된 핵심**: PortfolioManager에서 보유 자산들의 수익률 추이 차트 (x축=시간, y축=수익률(%), 선그래프)
+**다음 목표**: 기술적 분석 엔진 (Phase 7) + BAR 데이터 관리 (Phase 3, 8) + 차트/분석 엔드포인트 (Phase 6.2~6.6)
